@@ -41,9 +41,10 @@ class Square {
 
 class GameManager {
   static getInput(){
-    const gamepad = navigator.getGamepads()[0];
+    let gamepad = navigator.getGamepads()[0];
+    gamepad = gamepad.buttons.length ? gamepad : navigator.getGamepads()[1];
 
-    const moveXAndY = gamepad ? this.getGamePadInput() : this.getKeyBoardInput();
+    const moveXAndY = gamepad ? this.getGamePadInput(gamepad) : this.getKeyBoardInput();
 
     player.move(moveXAndY);
 
@@ -101,7 +102,7 @@ class GameManager {
     return [xMove, yMove];
 
     function applyDeadzone(number, threshold){
-      percentage = (Math.abs(number) - threshold) / (1 - threshold);
+      let percentage = (Math.abs(number) - threshold) / (1 - threshold);
 
       if(percentage < 0)
         percentage = 0;
@@ -140,7 +141,7 @@ const gameSetup = () => {
   player = new Square('#ff0000');
   entities.push(player);
   setInputEvents();
-  gameInterval = setInterval(gameLoop, 17);
+  gameInterval = setInterval(window.requestAnimationFrame(gameLoop), 17);
 };
 
 gameSetup();
