@@ -1,16 +1,8 @@
-let gameInterval, player;
-let keys = [], entities = [];
-const LEFT_ARROW = 37;
-const UP_ARROW = 38;
-const RIGHT_ARROW = 39;
-const DOWN_ARROW = 40;
-const YELLOW_KEY = 87;  // W KEY
-const BLUE_KEY = 65;    // A KEY
-const GREEN_KEY = 90;   // Z KEY
-const RED_KEY = 83;     // S KEY
-
 const canvas = document.getElementById('coolDudeCanvas');
 const _g = canvas.getContext('2d');
+
+let gameInterval;
+let player;
 
 class Square {
   constructor(_color, _x = 50, _y = 50) {
@@ -42,28 +34,13 @@ class Square {
 class GameManager {
   static getInput(){
     let gamepad = navigator.getGamepads()[0];
+    if (!gamepad) return;
+
     gamepad = gamepad.buttons.length ? gamepad : navigator.getGamepads()[1];
 
-    const moveXAndY = gamepad ? this.getGamePadInput(gamepad) : this.getKeyBoardInput();
+    const moveXAndY = this.getGamePadInput(gamepad);
 
     player.move(moveXAndY);
-
-  }
-
-  static getKeyBoardInput() {
-    let xMove = 0;
-    let yMove = 0;
-
-    if (keys[LEFT_ARROW]) xMove -= 4;
-    if (keys[UP_ARROW]) yMove -= 2;
-    if (keys[RIGHT_ARROW]) xMove += 4;
-    if (keys[DOWN_ARROW]) yMove += 2;
-    if (keys[YELLOW_KEY]) player.shiftColor('yellow');
-    if (keys[BLUE_KEY]) player.shiftColor('blue');
-    if (keys[GREEN_KEY]) player.shiftColor('green');
-    if (keys[RED_KEY]) player.shiftColor('red');
-
-    return [xMove, yMove];
   }
 
   static getGamePadInput(gamepad) {
@@ -90,12 +67,16 @@ class GameManager {
       alert("buttons array undefined or empty. reconnect?");
     }
 
+    // If green 'A' button is pressed
     if (gamepad.buttons[0].value > 0.5)
       player.shiftColor('green');
+    // If red 'B' button is pressed
     if (gamepad.buttons[1].value > 0.5)
       player.shiftColor('red');
+    // If blue 'X' button is pressed
     if (gamepad.buttons[2].value > 0.5)
       player.shiftColor('blue');
+    // If yellow 'Y' button is pressed
     if (gamepad.buttons[3].value > 0.5)
       player.shiftColor('yellow');
 
@@ -113,24 +94,9 @@ class GameManager {
 
   static render(){
     _g.clearRect(0, 0, canvas.width, canvas.height);
-    entities.forEach((entity) => {
-      entity.render();
-    });
+    player.render();
   }
 }
-
-const setKeyTrue = (event) => {
-  keys[event.keyCode] = true;
-};
-
-const setKeyFalse = (event) => {
-  keys[event.keyCode] = false;
-};
-
-const setInputEvents = () => {
-  document.addEventListener('keydown', setKeyTrue);
-  document.addEventListener('keyup', setKeyFalse);
-};
 
 const gameLoop = () => {
   GameManager.getInput();
@@ -139,8 +105,6 @@ const gameLoop = () => {
 
 const gameSetup = () => {
   player = new Square('#ff0000');
-  entities.push(player);
-  setInputEvents();
   gameInterval = setInterval(window.requestAnimationFrame(gameLoop), 17);
 };
 
