@@ -1,7 +1,7 @@
 const canvas = document.getElementById('coolDudeCanvas');
 const _g = canvas.getContext('2d');
 
-let gameInterval
+let gameInterval;
 let player;
 
 class Square {
