@@ -1,14 +1,14 @@
 const canvas = document.getElementById('coolDudeCanvas');
 const _g = canvas.getContext('2d');
 
-let gameInterval;
+let gameInterval
 let player;
 
 class Square {
-  constructor(_color, _x = 50, _y = 50) {
+  constructor(_color, _x, _y) {
     this.color = _color;
-    this.height = 25;
-    this.width = 75;
+    this.height = 15;
+    this.width = 35;
     this.x = _x;
     this.y = _y;
   }
@@ -104,8 +104,8 @@ const gameLoop = () => {
 };
 
 const gameSetup = () => {
-  player = new Square('#ff0000');
-  gameInterval = setInterval(window.requestAnimationFrame(gameLoop), 17);
+  player = new Square('#ff0000', 5, 5);
+  gameInterval = setInterval(gameLoop, 17);
 };
 
 gameSetup();
