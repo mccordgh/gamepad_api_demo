@@ -109,3 +109,11 @@ const gameSetup = () => {
 };
 
 gameSetup();
+
+// window.addEventListener("gamepadconnected", function(e) {
+//   console.log("Gamepad connected", e.gamepad);
+// });
+// window.addEventListener("gamepaddisconnected", function(e) {
+//   console.log("Gamepad disconnected", e.gamepad);
+// });
+
